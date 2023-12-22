@@ -8,6 +8,7 @@ function App() {
   const [allTodos, setAllTodos] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [completedTodos, setCompletedTodos] = useState([]);
 
   const handleAddTodo = () => {
     let newTodoitem = {
@@ -21,12 +22,72 @@ function App() {
     localStorage.setItem('todolist', JSON.stringify(updatedTodoArr))
   };
 
+  // const handleDeleteTodo = (index) => {
+  //   let reducedTodo = [...allTodos];
+  //   reducedTodo.splice(index);
+
+  //   localStorage.setItem('todolist', JSON.stringify(reducedTodo))
+  //   setAllTodos(reducedTodo)
+  // }
+
+  const handleDeleteTodo = (index) => {
+    const reducedTodo = allTodos.filter((element, i) => i !== index);
+    localStorage.setItem('todolist', JSON.stringify(reducedTodo));
+    setAllTodos(reducedTodo);
+  }
+
+  const handleComplete = (index) => {
+    let now = new Date();
+    let dd = now.getDate();
+    let mm = now.getMonth();
+    let yyyy = now.getFullYear();
+    let h = now.getHours();
+    let m = addZero(now.getMinutes());
+    let s = addZero(now.getSeconds());
+
+    function addZero(i) {
+      if (i < 10) {i = "0" + i}
+      return i;
+    }
+    let completedOn = `${dd}-${mm}-${yyyy} at ${h}:${m}:${s}`;
+
+    let filteredItems = {
+      ...allTodos[index],
+      completedOn: completedOn
+    }
+
+    let updatedCompletedArr = [...completedTodos];
+    updatedCompletedArr.push(filteredItems);
+    setCompletedTodos(updatedCompletedArr);
+    handleDeleteTodo(index);
+
+    localStorage.setItem('completedTodos', JSON.stringify(updatedCompletedArr))
+  }
+
+  // const handleDeleteCompletedTodo =(index) => {
+  //   let reducedTodo = [...completedTodos];
+  //   reducedTodo.splice(index);
+
+  //   localStorage.setItem('completedTodos', JSON.stringify(reducedTodo))
+  //   setCompletedTodos(reducedTodo)
+  // }
+
+  const handleDeleteCompletedTodo = (index) => {
+    const reducedTodo = completedTodos.filter((element, i) => i !== index);
+    localStorage.setItem('completedTodos', JSON.stringify(reducedTodo));
+    setCompletedTodos(reducedTodo);
+  }
+
   useEffect(() => {
     let savedTodo = JSON.parse(localStorage.getItem('todolist'))
-    if(savedTodo){
+    let savedCompletedTodo = JSON.parse(localStorage.getItem('completedTodos'))
+    if (savedTodo) {
       setAllTodos(savedTodo)
     }
-  })
+    if(savedCompletedTodo){
+      setCompletedTodos(savedCompletedTodo)
+    }
+  }, [])
   return (
     <div className="App">
       <h1>Todos</h1>
@@ -79,7 +140,7 @@ function App() {
         </div>
 
         <div className="todo-list">
-          {allTodos.map((item, index) => {
+          {isCompleteScreen === false && allTodos.map((item, index) => {
             return (
               <div className="todo-list-item" key={index}>
                 <div>
@@ -88,8 +149,24 @@ function App() {
                 </div>
 
                 <div>
-                  <MdDeleteForever className="icon" />
-                  <IoCheckmark className="check-icon" />
+                  <MdDeleteForever className="icon" onClick={() => handleDeleteTodo(index)} />
+                  <IoCheckmark className="check-icon" onClick={() => handleComplete(index)} />
+                </div>
+              </div>
+            );
+          })}
+
+          {isCompleteScreen === true && completedTodos.map((item, index) => {
+            return (
+              <div className="todo-list-item" key={index}>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <p><small style={{color: 'white'}}>Completed on: {item.completedOn} </small></p>
+                </div>
+
+                <div>
+                  <MdDeleteForever className="icon" onClick={() => handleDeleteCompletedTodo(index)} />
                 </div>
               </div>
             );
