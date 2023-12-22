@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './App.css';
+import { MdDeleteForever } from "react-icons/md";
+import { IoCheckmark } from "react-icons/io5";
 
 function App() {
 
@@ -32,8 +34,15 @@ function App() {
 
         <div className='todo-list'>
           <div className='todo-list-item'>
-            <h3>Task 1</h3>
-            <p>This is a description for task one.</p>
+            <div>
+              <h3>Task 1</h3>
+              <p>This is a description for task one.</p>
+            </div>
+
+            <div>
+              < MdDeleteForever className='icon'/>
+              <IoCheckmark className='check-icon'/>
+            </div>
           </div>
         </div>
 
