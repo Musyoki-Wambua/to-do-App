@@ -41,15 +41,15 @@ Follow these steps to run the application locally:
 
 ## Using the Application
 
-Open your web browser and go to <http://localhost:3000> to view the app.
+- Open your web browser and go to <http://localhost:3000> to view the app.
 
-Use the "Todo" and "Completed" buttons to switch between active and completed todos.
+- Use the "Todo" and "Completed" buttons to switch between active and completed todos.
 
-Add new todos using the input fields and "Add" button.
+- Add new todos using the input fields and "Add" button.
 
-Mark todos as completed using the checkmark icon.
+- Mark todos as completed using the checkmark icon.
 
-Delete todos using the trash icon.
+- Delete todos using the trash icon.
 
 ## License
 
